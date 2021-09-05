@@ -8,6 +8,8 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
+    "predeploy": "cd ./back-end && npm deploy",
+    "deploy": "cd ./front-end && npm deploy",
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
