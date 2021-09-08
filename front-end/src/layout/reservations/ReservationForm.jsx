@@ -7,7 +7,7 @@ function ReservationForm({formState, setFormState}) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    history.push("/");
+    history.push(`/dashboard/?date=${reservation_date}`);
   }
 
   const handleCancel = () => {
@@ -62,7 +62,7 @@ function ReservationForm({formState, setFormState}) {
       <label htmlFor="mobile_number">
         Mobile Number
         <input
-          type="text"
+          type="tel"
           id="mobile_number"
           name="mobile_number"
           placeholder="Mobile Number"
@@ -77,7 +77,8 @@ function ReservationForm({formState, setFormState}) {
           type="date"
           id="reservation_date"
           name="reservation_date"
-          placeholder="Reservation Date"
+          placeholder="YYYY-MM-DD"
+          pattern="\d{4}-\d{2}-\d{2}"
           required
           value={reservation_date}
           onChange={handleFormChange}
@@ -89,7 +90,8 @@ function ReservationForm({formState, setFormState}) {
           type="time"
           id="reservation_time"
           name="reservation_time"
-          placeholder="Reservation Time"
+          placeholder="HH:MM"
+          pattern="[0-9]{2}:[0-9]{2}"
           required
           value={reservation_time}
           onChange={handleFormChange}
