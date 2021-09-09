@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { createReservation } from "../../utils/api";
 
 function ReservationForm({formState, setFormState}) {
   const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formState;
@@ -7,7 +8,13 @@ function ReservationForm({formState, setFormState}) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    history.push(`/dashboard/?date=${reservation_date}`);
+
+    async function createFormReservation(formState) {
+      const {reservation_date} = await createReservation(formState, new AbortController().abort());
+      history.push(`/dashboard/?date=${reservation_date}`);
+    }
+
+    createFormReservation(formState);
   }
 
   const handleCancel = () => {

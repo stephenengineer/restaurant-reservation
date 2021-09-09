@@ -34,7 +34,6 @@ function Dashboard({ date }) {
       </div>
       <ErrorAlert error={reservationsError} />
       {JSON.stringify(reservations)}
-      Remove this text {date}
       <button onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>
         Previous
       </button>
