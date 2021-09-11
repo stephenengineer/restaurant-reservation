@@ -51,6 +51,33 @@ function bodyValidation(req, res, next) {
   return next();
 }
 
+function dayAndTimeValidation(req, res, next) {
+  const { reservation_date } = res.locals.body;
+  const dateObject = new Date(reservation_date);
+  const today = new Date();
+  const [year, month, day] = [
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  ];
+  const todayObject = new Date(year, month, day);
+
+  let message = "";
+  if (dateObject < todayObject) {
+    message = "Only future and present reservation dates are allowed";
+  }
+  if (dateObject.getDay() === 2) {
+    message = "Reservation date must not be a Tuesday";
+  }
+  if (message.length) {
+    next({
+      status: 400,
+      message: message,
+    });
+  }
+  return next();
+}
+
 /**
  * Create handler for reservation resources
  */
@@ -74,6 +101,6 @@ async function list(req, res) {
 }
 
 module.exports = {
-  create: [bodyValidation, asyncErrorBoundary(create)],
+  create: [bodyValidation, dayAndTimeValidation, asyncErrorBoundary(create)],
   list: asyncErrorBoundary(list),
 };
