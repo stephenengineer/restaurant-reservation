@@ -1,20 +1,25 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../../utils/api";
+import { getDayOfWeek, today, timeNow } from "../../utils/date-time";
 
-function ReservationForm({formState, setFormState}) {
+function ReservationForm({formState, setFormState, reservationsErrors, setReservationsErrors}) {
   const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formState;
   const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setReservationsErrors((currentErrors) => null)
 
     async function createFormReservation(formState) {
       const {reservation_date} = await createReservation(formState, new AbortController().abort());
       history.push(`/dashboard/?date=${reservation_date}`);
     }
 
-    createFormReservation(formState);
+    try {
+      if (formSubmitValidation(event)) createFormReservation(formState);
+    }
+    catch (error) {}
   }
 
   const handleCancel = () => {
@@ -22,7 +27,7 @@ function ReservationForm({formState, setFormState}) {
   }
 
   const handleFormChange = (event) => {
-    if (formValidation(event)) {
+    if (formChangeValidation(event)) {
       setFormState((currentState) => {
         return {
         ...currentState,
@@ -32,11 +37,24 @@ function ReservationForm({formState, setFormState}) {
     }
   }
 
-  const formValidation = (event) => {
+  const formChangeValidation = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     if (name === "mobile_number") return !value.replace(/[0-9]/g, "").length;
     if (name === "people") return value > 0;
+    return true;
+  }
+
+  const formSubmitValidation = (event) => {
+    const {reservation_date} = formState;
+    const errors = [];
+    if (getDayOfWeek(reservation_date) === 2) errors.push(new Error("The restaurant is closed on Tuesdays. Please choose another day."));
+    if (reservation_date < today() || (reservation_date === today() && reservation_time < timeNow())) errors.push(new Error("The selected reservation date is in the past. Only future reservations are allowed."));
+    if (errors.length) {
+      setReservationsErrors((currentErrors) => errors)
+      console.log(errors);
+      throw new Error(errors);
+    }
     return true;
   }
   

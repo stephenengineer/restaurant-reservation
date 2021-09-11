@@ -15,6 +15,7 @@ import CreateReservation from "./reservations-new/CreateReservation";
  */
 function Routes() {
   const [date, setDate] = useState(today());
+  const [reservationsErrors, setReservationsErrors] = useState(null);
 
   const query = useQuery();
   const queryDate = query.get("date");
@@ -32,10 +33,17 @@ function Routes() {
         <Redirect to={"/dashboard"} />
       </Route>
       <Route exact={true} path="/reservations/new">
-        <CreateReservation />
+        <CreateReservation
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
+        />
       </Route>
       <Route path="/dashboard">
-        <Dashboard date={date} setDate={setDate} />
+        <Dashboard
+          date={date}
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
+        />
       </Route>
       <Route>
         <NotFound />

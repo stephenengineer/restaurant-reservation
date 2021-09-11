@@ -10,19 +10,18 @@ import { today, previous, next } from "../utils/date-time";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+function Dashboard({ date, reservationsErrors, setReservationsErrors }) {
   const [reservations, setReservations] = useState([]);
-  const [reservationsError, setReservationsError] = useState(null);
   const history = useHistory();
 
-  useEffect(loadDashboard, [date]);
+  useEffect(loadDashboard, [date, setReservationsErrors]);
 
   function loadDashboard() {
     const abortController = new AbortController();
-    setReservationsError(null);
+    setReservationsErrors(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setReservationsErrors);
     return () => abortController.abort();
   }
 
@@ -32,7 +31,7 @@ function Dashboard({ date }) {
       <div className="d-md-flex mb-3">
         <h4 className="mb-0">Reservations for date</h4>
       </div>
-      <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={reservationsErrors} />
       {JSON.stringify(reservations)}
       <button onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>
         Previous

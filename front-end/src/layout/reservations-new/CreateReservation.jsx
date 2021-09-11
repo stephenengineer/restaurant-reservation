@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ReservationForm from "../reservations/ReservationForm";
+import ErrorAlert from "../ErrorAlert";
 
-function CreateReservation() {
+function CreateReservation({reservationsErrors, setReservationsErrors}) {
   const initialFormState = {
     first_name: "",
     last_name: "",
@@ -15,7 +16,13 @@ function CreateReservation() {
 
   return (
     <>
-      <ReservationForm formState={formState} setFormState={setFormState} />
+      <ErrorAlert error={reservationsErrors} />
+      <ReservationForm
+        formState={formState}
+        setFormState={setFormState}
+        reservationsErrors={reservationsErrors}
+        setReservationsErrors={setReservationsErrors}
+      />
     </>
   )
 }
