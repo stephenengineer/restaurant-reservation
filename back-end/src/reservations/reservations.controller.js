@@ -1,4 +1,5 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const specifiedTimeString = require("../utils/specifiedTimeString");
 const service = require("./reservations.service");
 
 /**
@@ -52,7 +53,7 @@ function bodyValidation(req, res, next) {
 }
 
 function dayAndTimeValidation(req, res, next) {
-  const { reservation_date } = res.locals.body;
+  const { reservation_date, reservation_time } = res.locals.body;
   const dateObject = new Date(reservation_date);
   const today = new Date();
   const [year, month, day] = [
@@ -62,12 +63,24 @@ function dayAndTimeValidation(req, res, next) {
   ];
   const todayObject = new Date(year, month, day);
 
+  const reservationTimeTruncated = reservation_time.match(/\d\d:\d\d/)[0];
+  const timeNow = today.toTimeString().match(/\d\d:\d\d/)[0];
+
   let message = "";
   if (dateObject < todayObject) {
     message = "Only future and present reservation dates are allowed";
   }
   if (dateObject.getDay() === 2) {
     message = "Reservation date must not be a Tuesday";
+  }
+  if (reservationTimeTruncated <= timeNow) {
+    message = "Only future reservation times are allowed";
+  }
+  if (
+    reservationTimeTruncated < specifiedTimeString(10, 30) ||
+    reservationTimeTruncated > specifiedTimeString(21, 30)
+  ) {
+    message = "Reservation time must be between 10:30 AM and 9:30 PM";
   }
   if (message.length) {
     next({
