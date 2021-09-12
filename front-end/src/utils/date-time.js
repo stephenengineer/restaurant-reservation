@@ -91,3 +91,9 @@ export function getDayOfWeek(currentDate) {
 export function timeNow() {
   return formatAsTime(new Date().toTimeString());
 }
+
+export function specifiedTime(hour, minute) {
+  const time = new Date();
+  time.setHours(hour, minute);
+  return formatAsTime(time.toString());
+}

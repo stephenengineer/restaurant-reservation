@@ -1,7 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../../utils/api";
-import { getDayOfWeek, today, timeNow } from "../../utils/date-time";
+import { getDayOfWeek, today, timeNow, specifiedTime } from "../../utils/date-time";
 
 function ReservationForm({formState, setFormState, reservationsErrors, setReservationsErrors}) {
   const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formState;
@@ -46,13 +46,14 @@ function ReservationForm({formState, setFormState, reservationsErrors, setReserv
   }
 
   const formSubmitValidation = (event) => {
-    const {reservation_date} = formState;
+    const {reservation_date, reservation_time} = formState;
     const errors = [];
     if (getDayOfWeek(reservation_date) === 2) errors.push(new Error("The restaurant is closed on Tuesdays. Please choose another day."));
-    if (reservation_date < today() || (reservation_date === today() && reservation_time < timeNow())) errors.push(new Error("The selected reservation date is in the past. Only future reservations are allowed."));
+    if (reservation_date < today() || (reservation_date === today() && reservation_time <= timeNow())) errors.push(new Error("The selected reservation date is in the past. Only future reservations are allowed."));
+    if (reservation_time < specifiedTime(10, 30)) errors.push(new Error("The restaurant is closed before 10:30 AM. Please choose another time."));
+    if (reservation_time > specifiedTime(21, 30)) errors.push(new Error("The restaurant closes at 10:30 PM. Only reservations up to an hour before closing are allowed."));
     if (errors.length) {
       setReservationsErrors((currentErrors) => errors)
-      console.log(errors);
       throw new Error(errors);
     }
     return true;
