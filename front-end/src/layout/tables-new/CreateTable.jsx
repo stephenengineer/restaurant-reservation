@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import TableForm from "../tables/TableForm";
+import ErrorAlert from "../ErrorAlert";
 
-function CreateTable() {
+function CreateTable({tablesErrors, setTablesErrors}) {
   const initialFormState = {
     table_name: "",
     capacity: ""
@@ -11,9 +12,12 @@ function CreateTable() {
 
   return (
     <>
+      <ErrorAlert error={tablesErrors} />
       <TableForm
         formState={formState}
         setFormState={setFormState}
+        tablesErrors={tablesErrors}
+        setTablesErrors={setTablesErrors}
       />
     </>
   )

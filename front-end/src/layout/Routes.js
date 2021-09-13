@@ -16,7 +16,7 @@ import CreateTable from "./tables-new/CreateTable";
  */
 function Routes() {
   const [date, setDate] = useState(today());
-  const [reservationsErrors, setReservationsErrors] = useState(null);
+  const [Errors, setErrors] = useState(null);
 
   const query = useQuery();
   const queryDate = query.get("date");
@@ -35,18 +35,18 @@ function Routes() {
       </Route>
       <Route exact={true} path="/reservations/new">
         <CreateReservation
-          reservationsErrors={reservationsErrors}
-          setReservationsErrors={setReservationsErrors}
+          reservationsErrors={Errors}
+          setReservationsErrors={setErrors}
         />
       </Route>
       <Route exact={true} path="/tables/new">
-        <CreateTable />
+        <CreateTable tablesErrors={Errors} setTablesErrors={setErrors} />
       </Route>
       <Route path="/dashboard">
         <Dashboard
           date={date}
-          reservationsErrors={reservationsErrors}
-          setReservationsErrors={setReservationsErrors}
+          reservationsErrors={Errors}
+          setReservationsErrors={setErrors}
         />
       </Route>
       <Route>

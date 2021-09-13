@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import { today, previous, next } from "../utils/date-time";
+import ReservationItem from "./ReservationItem";
 
 /**
  * Defines the dashboard page.
@@ -25,6 +26,13 @@ function Dashboard({ date, reservationsErrors, setReservationsErrors }) {
     return () => abortController.abort();
   }
 
+  const reservationsList = reservations.map((reservation) => (
+    <ReservationItem
+      key={reservation.reservation_id}
+      reservation={reservation}
+    />
+  ));
+
   return (
     <main>
       <h1>Dashboard</h1>
@@ -32,6 +40,7 @@ function Dashboard({ date, reservationsErrors, setReservationsErrors }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsErrors} />
+      Reservations:
       {JSON.stringify(reservations)}
       <button onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>
         Previous

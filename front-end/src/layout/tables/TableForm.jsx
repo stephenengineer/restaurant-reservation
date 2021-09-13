@@ -2,16 +2,21 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../../utils/api";
 
-function TableForm({formState, setFormState}) {
+function TableForm({formState, setFormState, tablesErrors, setTablesErrors}) {
   const {table_name, capacity} = formState;
   const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setTablesErrors((currentErrors) => null)
 
     async function createFormTable(formState) {
-      await createTable(formState, new AbortController().abort());
-      history.push(`/dashboard`);
+      try {
+        await createTable(formState, new AbortController().abort());
+        history.push(`/dashboard`);
+      } catch (error) {
+        setTablesErrors((currentErrors) => new Error("Backend Error: " + error.message));
+      }
     }
 
     createFormTable(formState);

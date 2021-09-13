@@ -12,8 +12,12 @@ function ReservationForm({formState, setFormState, reservationsErrors, setReserv
     setReservationsErrors((currentErrors) => null)
 
     async function createFormReservation(formState) {
-      const {reservation_date} = await createReservation(formState, new AbortController().abort());
-      history.push(`/dashboard/?date=${reservation_date}`);
+      try {
+        const {reservation_date} = await createReservation(formState, new AbortController().abort());
+        history.push(`/dashboard/?date=${reservation_date}`);
+      } catch (error) {
+        setReservationsErrors((currentErrors) => new Error("Backend Error: " + error.message));
+      }
     }
 
     try {

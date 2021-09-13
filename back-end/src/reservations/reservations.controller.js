@@ -54,7 +54,7 @@ function bodyValidation(req, res, next) {
 
 function dayAndTimeValidation(req, res, next) {
   const { reservation_date, reservation_time } = res.locals.body;
-  const dateObject = new Date(reservation_date);
+  const dateObject = new Date(reservation_date + "T" + reservation_time);
   const today = new Date();
   const [year, month, day] = [
     today.getFullYear(),
@@ -62,20 +62,27 @@ function dayAndTimeValidation(req, res, next) {
     today.getDate(),
   ];
   const todayObject = new Date(year, month, day);
+  // month < 10
+  //   ? new Date(`${year}-0${month + 1}-${day + 3}`)
+  //   : new Date(`${year}-${month + 1}-${day + 3}`);
+  todayObject.setHours(0);
 
   const reservationTimeTruncated = reservation_time.match(/\d\d:\d\d/)[0];
   const timeNow = today.toTimeString().match(/\d\d:\d\d/)[0];
+  console.log(reservation_date, reservation_time);
+  console.log("today", today, "month", month, "day", day);
+  console.log("dateObject", dateObject);
 
   let message = "";
-  if (dateObject < todayObject) {
+  if (dateObject < today) {
     message = "Only future and present reservation dates are allowed";
   }
   if (dateObject.getDay() === 2) {
     message = "Reservation date must not be a Tuesday";
   }
-  if (reservationTimeTruncated <= timeNow) {
-    message = "Only future reservation times are allowed";
-  }
+  // if (reservationTimeTruncated <= timeNow) {
+  //   message = "Only future reservation times are allowed";
+  // }
   if (
     reservationTimeTruncated < specifiedTimeString(10, 30) ||
     reservationTimeTruncated > specifiedTimeString(21, 30)
