@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -14,16 +14,24 @@ import TableItem from "./TableItem";
  */
 function Dashboard({
   date,
+  reservations,
+  setReservations,
+  tables,
+  setTables,
   reservationsErrors,
   setReservationsErrors,
   tablesErrors,
   setTablesErrors,
 }) {
-  const [reservations, setReservations] = useState([]);
-  const [tables, setTables] = useState([]);
   const history = useHistory();
 
-  useEffect(loadDashboard, [date, setReservationsErrors, setTablesErrors]);
+  useEffect(loadDashboard, [
+    date,
+    setReservations,
+    setTables,
+    setReservationsErrors,
+    setTablesErrors,
+  ]);
 
   function loadDashboard() {
     const abortController = new AbortController();

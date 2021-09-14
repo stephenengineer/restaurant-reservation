@@ -17,6 +17,8 @@ import Seat from "./reservations-seat/Seat";
  */
 function Routes() {
   const [date, setDate] = useState(today());
+  const [reservations, setReservations] = useState([]);
+  const [tables, setTables] = useState([]);
   const [reservationsErrors, setReservationsErrors] = useState(null);
   const [tablesErrors, setTablesErrors] = useState(null);
 
@@ -53,6 +55,10 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard
           date={date}
+          reservations={reservations}
+          setReservations={setReservations}
+          tables={tables}
+          setTables={setTables}
           reservationsErrors={reservationsErrors}
           setReservationsErrors={setReservationsErrors}
           tablesErrors={tablesErrors}
