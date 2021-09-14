@@ -6,6 +6,7 @@ import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import CreateReservation from "./reservations-new/CreateReservation";
 import CreateTable from "./tables-new/CreateTable";
+import Seat from "./reservations-seat/Seat";
 
 /**
  * Defines all the routes for the application.
@@ -16,7 +17,8 @@ import CreateTable from "./tables-new/CreateTable";
  */
 function Routes() {
   const [date, setDate] = useState(today());
-  const [Errors, setErrors] = useState(null);
+  const [reservationsErrors, setReservationsErrors] = useState(null);
+  const [tablesErrors, setTablesErrors] = useState(null);
 
   const query = useQuery();
   const queryDate = query.get("date");
@@ -35,18 +37,26 @@ function Routes() {
       </Route>
       <Route exact={true} path="/reservations/new">
         <CreateReservation
-          reservationsErrors={Errors}
-          setReservationsErrors={setErrors}
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
         />
       </Route>
+      <Route path="/reservations/:reservationId/seat">
+        <Seat />
+      </Route>
       <Route exact={true} path="/tables/new">
-        <CreateTable tablesErrors={Errors} setTablesErrors={setErrors} />
+        <CreateTable
+          tablesErrors={tablesErrors}
+          setTablesErrors={setTablesErrors}
+        />
       </Route>
       <Route path="/dashboard">
         <Dashboard
           date={date}
-          reservationsErrors={Errors}
-          setReservationsErrors={setErrors}
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
+          tablesErrors={tablesErrors}
+          setTablesErrors={setTablesErrors}
         />
       </Route>
       <Route>
