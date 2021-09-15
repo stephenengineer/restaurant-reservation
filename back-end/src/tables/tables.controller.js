@@ -75,6 +75,9 @@ async function reservationExists(req, res, next) {
   next({ status: 404, message: "Reservation cannot be found." });
 }
 
+/**
+ * Check for sufficient capacity and occupancy of table
+ */
 function capacityAndOccupancyValidation(req, res, next) {
   const { capacity, reservation_id } = res.locals.table;
   const { people } = res.locals.reservation;
@@ -86,6 +89,25 @@ function capacityAndOccupancyValidation(req, res, next) {
   }
   if (reservation_id) {
     message = "Table must not be occupied";
+  }
+  if (message.length) {
+    next({
+      status: 400,
+      message: message,
+    });
+  }
+  return next();
+}
+
+/**
+ * Check that table is occupied
+ */
+function tableOccupiedValidation(req, res, next) {
+  const { reservation_id } = res.locals.table;
+
+  let message = "";
+  if (!reservation_id) {
+    message = "Table must be occupied";
   }
   if (message.length) {
     next({
@@ -120,6 +142,16 @@ async function update(req, res) {
 }
 
 /**
+ * Handler for removing reservation from table resource
+ */
+async function removeReservationUpdate(req, res) {
+  const table_id = res.locals.table.table_id;
+  const reservation_id = null;
+  const data = await service.update(table_id, reservation_id);
+  res.sendStatus(204);
+}
+
+/**
  * List handler for table resources
  */
 async function list(req, res) {
@@ -137,6 +169,11 @@ module.exports = {
     asyncErrorBoundary(reservationExists),
     capacityAndOccupancyValidation,
     asyncErrorBoundary(update),
+  ],
+  updateRemoveReservation: [
+    asyncErrorBoundary(tableExists),
+    tableOccupiedValidation,
+    asyncErrorBoundary(removeReservationUpdate),
   ],
   list: asyncErrorBoundary(list),
 };
