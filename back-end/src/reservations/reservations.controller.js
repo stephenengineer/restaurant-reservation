@@ -52,6 +52,9 @@ function bodyValidation(req, res, next) {
   return next();
 }
 
+/**
+ * Specified time constraints validation handler for reservation creation
+ */
 function dayAndTimeValidation(req, res, next) {
   const { reservation_date, reservation_time } = res.locals.body;
   const dateObject = new Date(reservation_date + "T" + reservation_time);
@@ -90,6 +93,18 @@ function dayAndTimeValidation(req, res, next) {
 }
 
 /**
+ * Check for existence of reservation
+ */
+async function reservationExists(req, res, next) {
+  const reservation = await service.read(req.params.reservationId);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({ status: 404, message: "Reservation cannot be found." });
+}
+
+/**
  * Create handler for reservation resources
  */
 async function create(req, res) {
@@ -98,6 +113,13 @@ async function create(req, res) {
   res.status(201).json({
     data,
   });
+}
+
+/**
+ * Read handler for reservation resources
+ */
+async function read(req, res) {
+  res.json({ data: res.locals.reservation });
 }
 
 /**
@@ -113,5 +135,6 @@ async function list(req, res) {
 
 module.exports = {
   create: [bodyValidation, dayAndTimeValidation, asyncErrorBoundary(create)],
+  read: [asyncErrorBoundary(reservationExists), read],
   list: asyncErrorBoundary(list),
 };

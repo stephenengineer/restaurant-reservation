@@ -44,7 +44,14 @@ function Routes() {
         />
       </Route>
       <Route path="/reservations/:reservationId/seat">
-        <Seat />
+        <Seat
+          tables={tables}
+          setTables={setTables}
+          tablesErrors={tablesErrors}
+          setTablesErrors={setTablesErrors}
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
+        />
       </Route>
       <Route exact={true} path="/tables/new">
         <CreateTable
