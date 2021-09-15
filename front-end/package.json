@@ -23,7 +23,8 @@
   "scripts": {
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "vercel --prod",
+    "deploy": "vercel",
+    "deploy:prod": "vercel --prod",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
     "test": "npx cross-env CI=true npm run test:run",
