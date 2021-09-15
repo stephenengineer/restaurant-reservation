@@ -138,3 +138,18 @@ export async function updateTable(table_id, reservation_id, signal) {
   };
   return await fetchJson(url, options, []);
 }
+
+/**
+ * Removes a reservation from an existing table.
+ * @returns {Promise<table>}
+ *  a promise that resolves to the updated table saved in the database.
+ */
+export async function deleteReservationFromTable(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const options = {
+    method: "DELETE",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options, []);
+}

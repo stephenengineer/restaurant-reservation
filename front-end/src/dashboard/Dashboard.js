@@ -52,7 +52,13 @@ function Dashboard({
   ));
 
   const tablesList = tables.map((table) => (
-    <TableItem key={table.table_id} table={table} />
+    <TableItem
+      key={table.table_id}
+      table={table}
+      loadDashboard={loadDashboard}
+      tablesErrors={tablesErrors}
+      setTablesErrors={setTablesErrors}
+    />
   ));
 
   return (
