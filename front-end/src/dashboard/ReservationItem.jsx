@@ -1,12 +1,24 @@
 import React from "react";
 
-function ReservationItem({reservation}) {
+function ReservationItem({ reservation }) {
+  const seatButton = reservation.status === "booked" && (
+    <button>
+      <a href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a>
+    </button>
+  );
+
   return (
-    <div style={{borderStyle: "solid"}}>
-      {JSON.stringify(reservation)}
-      <button><a href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a></button>
-    </div>
-  )
+    reservation &&
+    reservation.status !== "finished" && (
+      <div style={{ borderStyle: "solid" }}>
+        {JSON.stringify(reservation)}
+        <p data-reservation-id-status={reservation.reservation_id}>
+          {reservation.status}
+        </p>
+        {seatButton}
+      </div>
+    )
+  );
 }
 
 export default ReservationItem;

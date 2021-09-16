@@ -145,9 +145,14 @@ async function update(req, res) {
  * Handler for removing reservation from table resource
  */
 async function removeReservationUpdate(req, res) {
-  const table_id = res.locals.table.table_id;
-  const reservation_id = null;
-  const data = await service.update(table_id, reservation_id);
+  const { table_id, reservation_id } = res.locals.table;
+  const reservationsReservation_id = null;
+  await service.update(
+    table_id,
+    reservationsReservation_id,
+    reservation_id,
+    "finished"
+  );
   res.sendStatus(204);
 }
 

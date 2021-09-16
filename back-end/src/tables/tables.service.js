@@ -17,13 +17,38 @@ function read(table_id) {
     .then((returnedRecords) => returnedRecords[0]);
 }
 
-function update(table_id, reservation_id) {
-  return knex(tableNameWithAlias)
-    .select("*")
-    .where({ table_id })
-    .update({ reservation_id })
-    .then((updatedRecords) => updatedRecords[0]);
+function update(
+  table_id,
+  reservation_id,
+  reservationsReservationId = reservation_id,
+  status = "seated"
+) {
+  return knex.transaction(function (trx) {
+    return knex(tableNameWithAlias)
+      .select("*")
+      .where({ table_id })
+      .update({ reservation_id })
+      .then(() =>
+        knex("reservations")
+          .select("*")
+          .where({ reservation_id: reservationsReservationId })
+          .update({ status })
+      )
+      .then(trx.commit)
+      .catch((error) => {
+        trx.rollback();
+        throw error;
+      });
+  });
 }
+
+// {
+//   return knex(tableNameWithAlias)
+//     .select("*")
+//     .where({ table_id })
+//     .update({ reservation_id })
+//     .then((updatedRecords) => updatedRecords[0]);
+// }
 
 function list() {
   return knex(tableNameWithAlias)

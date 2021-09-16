@@ -21,7 +21,7 @@ function TableItem({table, loadDashboard, tablesErrors, setTablesErrors}) {
     }
   }
 
-  return (
+  return table && (
     <div style={{borderStyle: "solid"}}>
       {JSON.stringify(table)}
       <p data-table-id-status={table.table_id}>{freeOrOccupied}</p>

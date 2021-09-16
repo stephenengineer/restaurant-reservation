@@ -41,14 +41,7 @@ function bodyValidation(req, res, next) {
       message: message,
     });
   }
-  res.locals.body = {
-    first_name,
-    last_name,
-    mobile_number,
-    reservation_date,
-    reservation_time,
-    people,
-  };
+  res.locals.body = req.body.data;
   return next();
 }
 
@@ -105,6 +98,26 @@ async function reservationExists(req, res, next) {
 }
 
 /**
+ * Validation handler for reservation update
+ */
+function statusValidation(req, res, next) {
+  const acceptableStatus = ["booked", "seated", "finished"];
+  const { data: { status } = {} } = req.body;
+  let message = "";
+  if (!acceptableStatus.includes(status)) {
+    message = "Status must be 'booked', 'seated', or 'finished'.";
+  }
+  if (message.length) {
+    next({
+      status: 400,
+      message: message,
+    });
+  }
+  res.locals.body = req.body.data;
+  return next();
+}
+
+/**
  * Create handler for reservation resources
  */
 async function create(req, res) {
@@ -123,6 +136,16 @@ async function read(req, res) {
 }
 
 /**
+ * Update handler for reservation resources
+ */
+async function update(req, res) {
+  const { reservation_id } = res.locals.reservation;
+  const { status } = res.locals.body;
+  const data = await service.update(reservation_id, status);
+  res.json({ data });
+}
+
+/**
  * List handler for reservation resources
  */
 async function list(req, res) {
@@ -136,5 +159,10 @@ async function list(req, res) {
 module.exports = {
   create: [bodyValidation, dayAndTimeValidation, asyncErrorBoundary(create)],
   read: [asyncErrorBoundary(reservationExists), read],
+  update: [
+    asyncErrorBoundary(reservationExists),
+    statusValidation,
+    asyncErrorBoundary(update),
+  ],
   list: asyncErrorBoundary(list),
 };
