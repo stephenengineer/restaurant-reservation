@@ -53,7 +53,7 @@ async function fetchJson(url, options, onCancel) {
 }
 
 /**
- * Retrieves all existing reservations.
+ * Retrieves all existing reservations that match either the date or a phone number segment.
  * @returns {Promise<[reservation]>}
  *  a promise that resolves to a possibly empty array of reservations saved in the database.
  */
