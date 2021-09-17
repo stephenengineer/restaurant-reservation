@@ -18,22 +18,28 @@ function bodyValidation(req, res, next) {
   } = req.body;
   let message = "";
   if (!first_name) {
-    message = "Reservation must include a first name";
+    message = "Reservation must include a first_name";
   }
   if (!last_name) {
-    message = "Reservation must include a last name";
+    message = "Reservation must include a last_name";
   }
   if (!mobile_number) {
-    message = "Reservation must include a mobile number";
+    message = "Reservation must include a mobile_number";
   }
   if (!reservation_date) {
-    message = "Reservation must include a reservation date";
+    message = "Reservation must include a reservation_date";
   }
   if (!reservation_time) {
-    message = "Reservation must include a reservation time";
+    message = "Reservation must include a reservation_time";
   }
-  if (people <= 0 || !people) {
+  if (people <= 0 || !people || !Number.isInteger(people)) {
     message = "Reservation must have a number of people that is greater than 0";
+  }
+  if (Number.isNaN(Date.parse(reservation_date))) {
+    message = "The reservation_date must be an actual date";
+  }
+  if (reservation_time && !reservation_time.match(/\d\d:\d\d/)) {
+    message = "The reservation_time must be an actual time";
   }
   if (message.length) {
     next({
@@ -89,12 +95,16 @@ function dayAndTimeValidation(req, res, next) {
  * Check for existence of reservation
  */
 async function reservationExists(req, res, next) {
-  const reservation = await service.read(req.params.reservationId);
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
   }
-  next({ status: 404, message: "Reservation cannot be found." });
+  next({
+    status: 404,
+    message: `Reservation ${reservationId} cannot be found.`,
+  });
 }
 
 /**
