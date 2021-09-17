@@ -149,11 +149,19 @@ async function update(req, res) {
  * List handler for reservation resources
  */
 async function list(req, res) {
-  const date = req.query.date;
-  const data = await service.list(date);
-  res.json({
-    data,
-  });
+  const { mobile_phone } = req.query;
+  if (mobile_phone) {
+    const data = await service.search(mobile_phone);
+    res.json({
+      data,
+    });
+  } else {
+    const date = req.query.date;
+    const data = await service.list(date);
+    res.json({
+      data,
+    });
+  }
 }
 
 module.exports = {
