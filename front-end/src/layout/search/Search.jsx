@@ -43,6 +43,7 @@ function Search({
         <ReservationItem
           key={reservation.reservation_id}
           reservation={reservation}
+          showAll={true}
         />
       ))
     : "No reservations found";
