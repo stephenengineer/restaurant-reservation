@@ -101,11 +101,11 @@ async function reservationExists(req, res, next) {
  * Validation handler for reservation update
  */
 function statusValidation(req, res, next) {
-  const acceptableStatus = ["booked", "seated", "finished"];
+  const acceptableStatus = ["booked", "seated", "finished", "cancelled"];
   const { data: { status } = {} } = req.body;
   let message = "";
   if (!acceptableStatus.includes(status)) {
-    message = "Status must be 'booked', 'seated', or 'finished'.";
+    message = "Status must be 'booked', 'seated', 'finished', or 'cancelled'.";
   }
   if (message.length) {
     next({
@@ -140,8 +140,20 @@ async function read(req, res) {
  */
 async function update(req, res) {
   const { reservation_id } = res.locals.reservation;
+  const updatedReservation = res.locals.body;
+  const data = await service.update(reservation_id, updatedReservation);
+  res.json({
+    data,
+  });
+}
+
+/**
+ * Handler for updating status of reservation resources
+ */
+async function updateStatus(req, res) {
+  const { reservation_id } = res.locals.reservation;
   const { status } = res.locals.body;
-  const data = await service.update(reservation_id, status);
+  const data = await service.updateStatus(reservation_id, status);
   res.json({ data });
 }
 
@@ -169,8 +181,14 @@ module.exports = {
   read: [asyncErrorBoundary(reservationExists), read],
   update: [
     asyncErrorBoundary(reservationExists),
-    statusValidation,
+    bodyValidation,
+    dayAndTimeValidation,
     asyncErrorBoundary(update),
+  ],
+  updateStatus: [
+    asyncErrorBoundary(reservationExists),
+    statusValidation,
+    asyncErrorBoundary(updateStatus),
   ],
   list: asyncErrorBoundary(list),
 };

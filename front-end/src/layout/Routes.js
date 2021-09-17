@@ -8,6 +8,7 @@ import CreateReservation from "./reservations-new/CreateReservation";
 import CreateTable from "./tables-new/CreateTable";
 import Seat from "./reservations-seat/Seat";
 import Search from "./search/Search";
+import EditReservation from "./reservations-edit/EditReservation";
 
 /**
  * Defines all the routes for the application.
@@ -22,6 +23,7 @@ function Routes() {
   const [tables, setTables] = useState([]);
   const [reservationsErrors, setReservationsErrors] = useState(null);
   const [tablesErrors, setTablesErrors] = useState(null);
+  const [reservation, setReservation] = useState(null);
 
   const query = useQuery();
   const queryDate = query.get("date");
@@ -44,6 +46,14 @@ function Routes() {
           setReservationsErrors={setReservationsErrors}
         />
       </Route>
+      <Route exact={true} path="/reservations/:reservationId/edit">
+        <EditReservation
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
+          reservation={reservation}
+          setReservation={setReservation}
+        />
+      </Route>
       <Route path="/reservations/:reservationId/seat">
         <Seat
           tables={tables}
@@ -52,6 +62,8 @@ function Routes() {
           setTablesErrors={setTablesErrors}
           reservationsErrors={reservationsErrors}
           setReservationsErrors={setReservationsErrors}
+          reservation={reservation}
+          setReservation={setReservation}
         />
       </Route>
       <Route exact={true} path="/tables/new">

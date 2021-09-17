@@ -1,45 +1,72 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../../utils/api";
-import { getDayOfWeek, today, timeNow, specifiedTime } from "../../utils/date-time";
+import { useHistory, useParams } from "react-router-dom";
+import { createReservation, updateReservation } from "../../utils/api";
+import {
+  getDayOfWeek,
+  today,
+  timeNow,
+  specifiedTime,
+} from "../../utils/date-time";
 
-function ReservationForm({formState, setFormState, reservationsErrors, setReservationsErrors}) {
-  const {first_name, last_name, mobile_number, reservation_date, reservation_time, people} = formState;
+function ReservationForm({
+  formState,
+  setFormState,
+  reservationsErrors,
+  setReservationsErrors,
+  editMode = false,
+}) {
+  const {
+    first_name,
+    last_name,
+    mobile_number,
+    reservation_date,
+    reservation_time,
+    people,
+  } = formState;
   const history = useHistory();
+  const { reservationId } = useParams();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setReservationsErrors((currentErrors) => null)
+    setReservationsErrors((currentErrors) => null);
 
-    async function createFormReservation(formState) {
+    async function createOrEditFormReservation(formState) {
+      const abortController = new AbortController();
       try {
-        const {reservation_date} = await createReservation(formState, new AbortController().abort());
+        const { reservation_date } = editMode
+          ? await updateReservation(
+              reservationId,
+              formState,
+              abortController.abort()
+            )
+          : await createReservation(formState, abortController.abort());
         history.push(`/dashboard/?date=${reservation_date}`);
       } catch (error) {
-        setReservationsErrors((currentErrors) => new Error("Backend Error: " + error.message));
+        setReservationsErrors(
+          (currentErrors) => new Error("Backend Error: " + error.message)
+        );
       }
     }
 
     try {
-      if (formSubmitValidation(event)) createFormReservation(formState);
-    }
-    catch (error) {}
-  }
+      if (formSubmitValidation(event)) createOrEditFormReservation(formState);
+    } catch (error) {}
+  };
 
   const handleCancel = () => {
     history.push("/");
-  }
+  };
 
   const handleFormChange = (event) => {
     if (formChangeValidation(event)) {
       setFormState((currentState) => {
         return {
-        ...currentState,
-        [event.target.name]: event.target.value
-        }
-      })
+          ...currentState,
+          [event.target.name]: event.target.value,
+        };
+      });
     }
-  }
+  };
 
   const formChangeValidation = (event) => {
     const name = event.target.name;
@@ -47,22 +74,45 @@ function ReservationForm({formState, setFormState, reservationsErrors, setReserv
     if (name === "mobile_number") return !value.replace(/[0-9]/g, "").length;
     if (name === "people") return value > 0;
     return true;
-  }
+  };
 
   const formSubmitValidation = (event) => {
-    const {reservation_date, reservation_time} = formState;
+    const { reservation_date, reservation_time } = formState;
     const errors = [];
-    if (getDayOfWeek(reservation_date) === 2) errors.push(new Error("The restaurant is closed on Tuesdays. Please choose another day."));
-    if (reservation_date < today() || (reservation_date === today() && reservation_time <= timeNow())) errors.push(new Error("The selected reservation date is in the past. Only future reservations are allowed."));
-    if (reservation_time < specifiedTime(10, 30)) errors.push(new Error("The restaurant is closed before 10:30 AM. Please choose another time."));
-    if (reservation_time > specifiedTime(21, 30)) errors.push(new Error("The restaurant closes at 10:30 PM. Only reservations up to an hour before closing are allowed."));
+    if (getDayOfWeek(reservation_date) === 2)
+      errors.push(
+        new Error(
+          "The restaurant is closed on Tuesdays. Please choose another day."
+        )
+      );
+    if (
+      reservation_date < today() ||
+      (reservation_date === today() && reservation_time <= timeNow())
+    )
+      errors.push(
+        new Error(
+          "The selected reservation date is in the past. Only future reservations are allowed."
+        )
+      );
+    if (reservation_time < specifiedTime(10, 30))
+      errors.push(
+        new Error(
+          "The restaurant is closed before 10:30 AM. Please choose another time."
+        )
+      );
+    if (reservation_time > specifiedTime(21, 30))
+      errors.push(
+        new Error(
+          "The restaurant closes at 10:30 PM. Only reservations up to an hour before closing are allowed."
+        )
+      );
     if (errors.length) {
-      setReservationsErrors((currentErrors) => errors)
+      setReservationsErrors((currentErrors) => errors);
       throw new Error(errors);
     }
     return true;
-  }
-  
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="first_name">
@@ -142,7 +192,7 @@ function ReservationForm({formState, setFormState, reservationsErrors, setReserv
       <button onClick={() => handleCancel()}>Cancel</button>
       <button type="submit">Submit</button>
     </form>
-  )
+  );
 }
 
 export default ReservationForm;

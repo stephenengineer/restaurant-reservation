@@ -19,18 +19,18 @@ function Search({
     event.preventDefault();
     setReservationsErrors((currentErrors) => null);
 
-    async function searchForMatchingReservations(formState) {
-      const abortController = new AbortController();
-      const mobile_phone = formState.mobile_number;
-      listReservations({ mobile_phone }, abortController.signal)
-        .then(setReservations)
-        .catch(setReservationsErrors);
-      return () => abortController.abort();
-    }
-
     searchForMatchingReservations(formState);
     setFindButtonClicked((buttonState) => true);
   };
+
+  async function searchForMatchingReservations(formState) {
+    const abortController = new AbortController();
+    const mobile_phone = formState.mobile_number;
+    listReservations({ mobile_phone }, abortController.signal)
+      .then(setReservations)
+      .catch(setReservationsErrors);
+    return () => abortController.abort();
+  }
 
   const handleFormChange = (event) => {
     setFormState((currentState) => {
@@ -43,6 +43,8 @@ function Search({
         <ReservationItem
           key={reservation.reservation_id}
           reservation={reservation}
+          reservationsErrors={reservationsErrors}
+          setReservationsErrors={setReservationsErrors}
           showAll={true}
         />
       ))

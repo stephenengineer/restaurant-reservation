@@ -48,6 +48,8 @@ function Dashboard({
     <ReservationItem
       key={reservation.reservation_id}
       reservation={reservation}
+      reservationsErrors={reservationsErrors}
+      setReservationsErrors={setReservationsErrors}
     />
   ));
 

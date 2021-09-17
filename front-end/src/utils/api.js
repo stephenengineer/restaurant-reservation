@@ -53,7 +53,7 @@ async function fetchJson(url, options, onCancel) {
 }
 
 /**
- * Retrieves all existing reservations that match either the date or a phone number segment.
+ * Retrieves all existing reservations that match either the date.
  * @returns {Promise<[reservation]>}
  *  a promise that resolves to a possibly empty array of reservations saved in the database.
  */
@@ -95,6 +95,40 @@ export async function createReservation(reservation, signal) {
   return await fetchJson(url, options, [])
     .then(formatReservationDate)
     .then(formatReservationTime);
+}
+
+/**
+ * Updates an existing reservation.
+ * @returns {Promise<reservation>}
+ *  a promise that resolves to the updated reservation saved in the database.
+ */
+export async function updateReservation(reservation_id, reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: reservation }),
+    signal,
+  };
+  return await fetchJson(url, options, [])
+    .then(formatReservationDate)
+    .then(formatReservationTime);
+}
+
+/**
+ * Updates an existing reservation's status to cancelled.
+ * @returns {Promise<table>}
+ *  a promise that resolves to the updated table saved in the database.
+ */
+export async function setReservationStatusToCancelled(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { status: "cancelled" } }),
+    signal,
+  };
+  return await fetchJson(url, options, []);
 }
 
 /**
