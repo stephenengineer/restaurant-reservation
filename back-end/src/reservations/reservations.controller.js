@@ -74,7 +74,7 @@ function dayAndTimeValidation(req, res, next) {
     message = "Only future and present reservation dates are allowed";
   }
   if (dateObject.getDay() === 2) {
-    message = "Reservation date must not be a Tuesday";
+    message = "Reservation date must not be a Tuesday since business is closed";
   }
   if (
     reservationTimeTruncated < specifiedTimeString(10, 30) ||
