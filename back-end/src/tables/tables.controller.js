@@ -9,10 +9,10 @@ function bodyValidation(req, res, next) {
   const { data: { table_name, capacity } = {} } = req.body;
   let message = "";
   if (!table_name) {
-    message = "Table must include a table name";
+    message = "Table must include a table_name";
   }
   if (table_name && table_name.length < 2) {
-    message = "Table name must be at least 2 characters long";
+    message = "The table_name must be at least 2 characters long";
   }
   if (capacity < 1 || !capacity) {
     message = "Table must have a capacity of at least 1";
@@ -49,7 +49,7 @@ function updateBodyValidation(req, res, next) {
   const { data: { reservation_id } = {} } = req.body;
   let message = "";
   if (!reservation_id) {
-    message = "Body must include a reservation ID";
+    message = "Body must include a reservation_id";
   }
   if (message.length) {
     next({
@@ -72,7 +72,10 @@ async function reservationExists(req, res, next) {
     res.locals.reservation = reservation;
     return next();
   }
-  next({ status: 404, message: "Reservation cannot be found." });
+  next({
+    status: 404,
+    message: `Reservation ${res.locals.body.reservation_id} cannot be found.`,
+  });
 }
 
 /**
