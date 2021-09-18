@@ -14,6 +14,7 @@ function bodyValidation(req, res, next) {
       reservation_date,
       reservation_time,
       people,
+      status,
     } = {},
   } = req.body;
   let message = "";
@@ -40,6 +41,9 @@ function bodyValidation(req, res, next) {
   }
   if (reservation_time && !reservation_time.match(/\d\d:\d\d/)) {
     message = "The reservation_time must be an actual time";
+  }
+  if (status && status !== "booked") {
+    message = `Reservation status of ${status} is not allowed. Status can only be 'booked'.`;
   }
   if (message.length) {
     next({
