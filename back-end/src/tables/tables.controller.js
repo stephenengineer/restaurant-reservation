@@ -79,9 +79,9 @@ async function reservationExists(req, res, next) {
 /**
  * Check for sufficient capacity and occupancy of table
  */
-function capacityAndOccupancyValidation(req, res, next) {
+function tableAndReservationValidation(req, res, next) {
   const { capacity, reservation_id } = res.locals.table;
-  const { people } = res.locals.reservation;
+  const { people, status } = res.locals.reservation;
 
   let message = "";
   if (capacity < people) {
@@ -90,6 +90,9 @@ function capacityAndOccupancyValidation(req, res, next) {
   }
   if (reservation_id) {
     message = "Table must not be occupied";
+  }
+  if (status === "seated") {
+    message = "Reservation is already seated";
   }
   if (message.length) {
     next({
@@ -173,7 +176,7 @@ module.exports = {
     asyncErrorBoundary(tableExists),
     updateBodyValidation,
     asyncErrorBoundary(reservationExists),
-    capacityAndOccupancyValidation,
+    tableAndReservationValidation,
     asyncErrorBoundary(update),
   ],
   updateRemoveReservation: [

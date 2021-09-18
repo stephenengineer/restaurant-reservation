@@ -116,10 +116,16 @@ async function reservationExists(req, res, next) {
  */
 function statusValidation(req, res, next) {
   const acceptableStatus = ["booked", "seated", "finished", "cancelled"];
+  const reservation = res.locals.reservation;
+  const currentStatus = reservation.status;
   const { data: { status } = {} } = req.body;
   let message = "";
   if (!acceptableStatus.includes(status)) {
-    message = "Status must be 'booked', 'seated', 'finished', or 'cancelled'.";
+    message =
+      "Status is unknown. The status must be 'booked', 'seated', 'finished', or 'cancelled'.";
+  }
+  if (currentStatus === "finished") {
+    message = "A finished reservation cannot be updated";
   }
   if (message.length) {
     next({
@@ -167,8 +173,8 @@ async function update(req, res) {
 async function updateStatus(req, res) {
   const { reservation_id } = res.locals.reservation;
   const { status } = res.locals.body;
-  const data = await service.updateStatus(reservation_id, status);
-  res.json({ data });
+  await service.updateStatus(reservation_id, status);
+  res.json({ data: { status } });
 }
 
 /**
@@ -183,7 +189,9 @@ async function list(req, res) {
     });
   } else {
     const date = req.query.date;
-    const data = await service.list(date);
+    const results = await service.list(date);
+    const data = results.filter((result) => result.status !== "finished");
+
     res.json({
       data,
     });
