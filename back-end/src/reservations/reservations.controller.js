@@ -181,9 +181,9 @@ async function updateStatus(req, res) {
  * List handler for reservation resources
  */
 async function list(req, res) {
-  const { mobile_phone } = req.query;
-  if (mobile_phone) {
-    const data = await service.search(mobile_phone);
+  const { mobile_number } = req.query;
+  if (mobile_number) {
+    const data = await service.search(mobile_number);
     res.json({
       data,
     });

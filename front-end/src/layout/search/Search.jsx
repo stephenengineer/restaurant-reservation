@@ -25,8 +25,8 @@ function Search({
 
   async function searchForMatchingReservations(formState) {
     const abortController = new AbortController();
-    const mobile_phone = formState.mobile_number;
-    listReservations({ mobile_phone }, abortController.signal)
+    const mobile_number = formState.mobile_number;
+    listReservations({ mobile_number }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsErrors);
     return () => abortController.abort();
