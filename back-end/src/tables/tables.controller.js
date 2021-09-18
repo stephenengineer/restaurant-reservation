@@ -31,12 +31,13 @@ function bodyValidation(req, res, next) {
  * Check for existence of table
  */
 async function tableExists(req, res, next) {
-  const table = await service.read(req.params.tableId);
+  const { tableId } = req.params;
+  const table = await service.read(tableId);
   if (table) {
     res.locals.table = table;
     return next();
   }
-  next({ status: 404, message: "Table cannot be found." });
+  next({ status: 404, message: `Table ${tableId} cannot be found.` });
 }
 
 /**
@@ -107,7 +108,7 @@ function tableOccupiedValidation(req, res, next) {
 
   let message = "";
   if (!reservation_id) {
-    message = "Table must be occupied";
+    message = "Table was not occupied but must be occupied";
   }
   if (message.length) {
     next({
@@ -153,7 +154,7 @@ async function removeReservationUpdate(req, res) {
     reservation_id,
     "finished"
   );
-  res.sendStatus(204);
+  res.status(200).json({ data: {} });
 }
 
 /**

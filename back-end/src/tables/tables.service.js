@@ -42,14 +42,6 @@ function update(
   });
 }
 
-// {
-//   return knex(tableNameWithAlias)
-//     .select("*")
-//     .where({ table_id })
-//     .update({ reservation_id })
-//     .then((updatedRecords) => updatedRecords[0]);
-// }
-
 function list() {
   return knex(tableNameWithAlias)
     .select("*")
