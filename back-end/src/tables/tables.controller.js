@@ -23,10 +23,7 @@ function bodyValidation(req, res, next) {
       message: message,
     });
   }
-  res.locals.body = {
-    table_name,
-    capacity,
-  };
+  res.locals.body = req.body.data;
   return next();
 }
 
