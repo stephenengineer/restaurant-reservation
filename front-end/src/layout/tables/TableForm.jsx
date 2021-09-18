@@ -2,39 +2,41 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../../utils/api";
 
-function TableForm({formState, setFormState, tablesErrors, setTablesErrors}) {
-  const {table_name, capacity} = formState;
+function TableForm({ formState, setFormState, tablesErrors, setTablesErrors }) {
+  const { table_name, capacity } = formState;
   const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setTablesErrors((currentErrors) => null)
+    setTablesErrors((currentErrors) => null);
 
     async function createFormTable(formState) {
       try {
         await createTable(formState, new AbortController().abort());
         history.push(`/dashboard`);
       } catch (error) {
-        setTablesErrors((currentErrors) => new Error("Backend Error: " + error.message));
+        setTablesErrors(
+          (currentErrors) => new Error("Backend Error: " + error.message)
+        );
       }
     }
 
     createFormTable(formState);
-  }
+  };
 
   const handleCancel = () => {
-    history.push("/");
-  }
+    history.goBack();
+  };
 
   const handleFormChange = (event) => {
     setFormState((currentState) => {
       return {
-      ...currentState,
-      [event.target.name]: event.target.value
-      }
-    })
-  }
-  
+        ...currentState,
+        [event.target.name]: event.target.value,
+      };
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="table_name">
@@ -66,7 +68,7 @@ function TableForm({formState, setFormState, tablesErrors, setTablesErrors}) {
       <button onClick={() => handleCancel()}>Cancel</button>
       <button type="submit">Submit</button>
     </form>
-  )
+  );
 }
 
 export default TableForm;
