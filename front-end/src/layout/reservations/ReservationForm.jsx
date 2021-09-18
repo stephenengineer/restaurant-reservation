@@ -60,9 +60,12 @@ function ReservationForm({
   const handleFormChange = (event) => {
     if (formChangeValidation(event)) {
       setFormState((currentState) => {
+        const { name, value } = event.target;
+        if (name === "people")
+          return { ...currentState, [name]: Number(value) };
         return {
           ...currentState,
-          [event.target.name]: event.target.value,
+          [name]: value,
         };
       });
     }
