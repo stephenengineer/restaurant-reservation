@@ -54,7 +54,7 @@ function ReservationForm({
   };
 
   const handleCancel = () => {
-    history.push("/");
+    history.goBack();
   };
 
   const handleFormChange = (event) => {
