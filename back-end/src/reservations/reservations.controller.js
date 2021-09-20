@@ -161,9 +161,9 @@ async function read(req, res) {
 async function update(req, res) {
   const { reservation_id } = res.locals.reservation;
   const updatedReservation = res.locals.body;
-  const data = await service.update(reservation_id, updatedReservation);
+  await service.update(reservation_id, updatedReservation);
   res.json({
-    data,
+    data: updatedReservation,
   });
 }
 

@@ -21,8 +21,7 @@ function update(reservation_id, updatedReservation) {
   return knex(tableNameWithAlias)
     .select("*")
     .where({ reservation_id })
-    .update(updatedReservation)
-    .then((updatedRecords) => updatedRecords[0]);
+    .update(updatedReservation);
 }
 
 function updateStatus(reservation_id, status) {

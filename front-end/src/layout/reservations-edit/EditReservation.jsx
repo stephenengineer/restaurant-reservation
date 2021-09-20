@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ReservationForm from "../reservations/ReservationForm";
 import ErrorAlert from "../ErrorAlert";
 import { useParams } from "react-router";
@@ -10,23 +10,12 @@ function EditReservation({
   reservation,
   setReservation,
 }) {
-  const initialFormState = {
-    first_name: "",
-    last_name: "",
-    mobile_number: "",
-    reservation_date: "",
-    reservation_time: "",
-    people: "",
-  };
-
-  const [formState, setFormState] = useState(initialFormState);
   const { reservationId } = useParams();
 
   useEffect(loadEditReservationPage, [
     reservationId,
     setReservationsErrors,
     setReservation,
-    reservation,
   ]);
 
   function loadEditReservationPage() {
@@ -34,28 +23,32 @@ function EditReservation({
     setReservationsErrors(null);
     readReservation(reservationId, abortController.signal)
       .then(setReservation)
-      .catch(setReservationsErrors)
-      .then(() => {
-        setFormState((previousFormState) => {
-          return {
-            ...previousFormState,
-            ...reservation,
-          };
-        });
-      });
+      .catch(setReservationsErrors);
     return () => abortController.abort();
   }
+
+  const reservationForm = reservation && (
+    <ReservationForm
+      reservationsErrors={reservationsErrors}
+      setReservationsErrors={setReservationsErrors}
+      editMode={true}
+      initialFormState={
+        reservation && {
+          first_name: reservation.first_name,
+          last_name: reservation.last_name,
+          mobile_number: reservation.mobile_number,
+          reservation_date: reservation.reservation_date,
+          reservation_time: reservation.reservation_time,
+          people: reservation.people,
+        }
+      }
+    />
+  );
 
   return (
     <>
       <ErrorAlert error={reservationsErrors} />
-      <ReservationForm
-        formState={formState}
-        setFormState={setFormState}
-        reservationsErrors={reservationsErrors}
-        setReservationsErrors={setReservationsErrors}
-        editMode={true}
-      />
+      {reservationForm}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { createReservation, updateReservation } from "../../utils/api";
 import {
@@ -9,12 +9,13 @@ import {
 } from "../../utils/date-time";
 
 function ReservationForm({
-  formState,
-  setFormState,
   reservationsErrors,
   setReservationsErrors,
   editMode = false,
+  initialFormState,
 }) {
+  const [formState, setFormState] = useState(initialFormState);
+
   const {
     first_name,
     last_name,
@@ -74,7 +75,7 @@ function ReservationForm({
   const formChangeValidation = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    if (name === "mobile_number") return !value.replace(/[0-9]/g, "").length;
+    if (name === "mobile_number") return !value.replace(/[0-9-]/g, "").length;
     if (name === "people") return value > 0;
     return true;
   };
