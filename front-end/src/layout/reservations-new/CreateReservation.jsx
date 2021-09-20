@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import ReservationForm from "../reservations/ReservationForm";
 import ErrorAlert from "../ErrorAlert";
 
@@ -12,14 +12,10 @@ function CreateReservation({ reservationsErrors, setReservationsErrors }) {
     people: "",
   };
 
-  // const [formState, setFormState] = useState(initialFormState);
-
   return (
     <>
       <ErrorAlert error={reservationsErrors} />
       <ReservationForm
-        // formState={formState}
-        // setFormState={setFormState}
         reservationsErrors={reservationsErrors}
         setReservationsErrors={setReservationsErrors}
         initialFormState={initialFormState}
