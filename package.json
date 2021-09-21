@@ -8,8 +8,9 @@
     "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
-    "predeploy": "cd ./back-end && npm run deploy",
-    "deploy": "cd ./front-end && npm run deploy",
+    "predeploy": "env CI=true npm test --colors",
+    "deploy": "cd ./back-end && npm run deploy",
+    "postdeploy": "cd ./front-end && npm run deploy",
     "build": "npm -prefix front-end run build",
     "preinstall": "cd ./back-end && npm install",
     "install": "cd ./front-end && npm install",
