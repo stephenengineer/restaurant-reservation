@@ -101,40 +101,42 @@ function Seat({
   ));
 
   return (
-    <>
-      <ErrorAlert error={tablesErrors} />
-      <ErrorAlert error={reservationsErrors} />
-      <ErrorAlert error={formError} />
-      <div className="card">
-        <h5 className="card-title">
-          Reservation ID: {reservation.reservation_id}
-        </h5>
-        <p>
-          Name: {reservation.first_name} {reservation.last_name} <br />
-          Phone: {reservation.mobile_number} <br />
-          Reservation Date: {reservation.reservation_date} <br />
-          Reservation Time: {reservation.reservation_time} <br />
-          Number of People: {reservation.people} <br />
-        </p>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="table_id">
-          Table
-          <select
-            name="table_id"
-            id="table_id"
-            required
-            onChange={handleFormChange}
-            value={formState.table_id}
-          >
-            <option value="">-- Select an Option --</option>
-            {seatList}
-          </select>
-        </label>
-        <button onClick={() => handleCancel()}>Cancel</button>
-        <button type="submit">Submit</button>
-      </form>
-    </>
+    reservation && (
+      <>
+        <ErrorAlert error={tablesErrors} />
+        <ErrorAlert error={reservationsErrors} />
+        <ErrorAlert error={formError} />
+        <div className="card">
+          <h5 className="card-title">
+            Reservation ID: {reservation.reservation_id}
+          </h5>
+          <p>
+            Name: {reservation.first_name} {reservation.last_name} <br />
+            Phone: {reservation.mobile_number} <br />
+            Reservation Date: {reservation.reservation_date} <br />
+            Reservation Time: {reservation.reservation_time} <br />
+            Number of People: {reservation.people} <br />
+          </p>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="table_id">
+            Table
+            <select
+              name="table_id"
+              id="table_id"
+              required
+              onChange={handleFormChange}
+              value={formState.table_id}
+            >
+              <option value="">-- Select an Option --</option>
+              {seatList}
+            </select>
+          </label>
+          <button onClick={() => handleCancel()}>Cancel</button>
+          <button type="submit">Submit</button>
+        </form>
+      </>
+    )
   );
 }
 
