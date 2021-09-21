@@ -1,12 +1,12 @@
 import React from "react";
 
-function ErrorComponent({error}) {
+function ErrorComponent({ error }) {
   return (
     <>
       Error: {error.message}
-      <br></br>
+      <br />
     </>
-  )
+  );
 }
 
 export default ErrorComponent;

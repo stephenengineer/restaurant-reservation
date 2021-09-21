@@ -131,6 +131,7 @@ function ReservationForm({
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <label htmlFor="last_name">
         Last Name
         <input
@@ -143,6 +144,7 @@ function ReservationForm({
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <label htmlFor="mobile_number">
         Mobile Number
         <input
@@ -155,6 +157,7 @@ function ReservationForm({
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <label htmlFor="reservation_date">
         Reservation Date
         <input
@@ -168,6 +171,7 @@ function ReservationForm({
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <label htmlFor="reservation_time">
         Reservation Time
         <input
@@ -181,6 +185,7 @@ function ReservationForm({
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <label htmlFor="people">
         People
         <input
@@ -193,6 +198,7 @@ function ReservationForm({
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <button onClick={() => handleCancel()}>Cancel</button>
       <button type="submit">Submit</button>
     </form>

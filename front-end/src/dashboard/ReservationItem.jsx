@@ -27,6 +27,26 @@ function ReservationItem({
     </button>
   );
 
+  const reservationInfo = (
+    <div className="card">
+      <h5 className="card-title">
+        Reservation ID: {reservation.reservation_id}
+      </h5>
+      <p>
+        Name: {reservation.first_name} {reservation.last_name} <br />
+        Phone: {reservation.mobile_number} <br />
+        Reservation Date: {reservation.reservation_date} <br />
+        Reservation Time: {reservation.reservation_time} <br />
+        Number of People: {reservation.people} <br />
+      </p>
+      <p data-reservation-id-status={reservation.reservation_id}>
+        {reservation.status}
+      </p>
+      {seatAndEditButtons}
+      {cancelButton}
+    </div>
+  );
+
   const cancel = () => {
     async function cancelReservation(reservation) {
       try {
@@ -51,33 +71,13 @@ function ReservationItem({
   };
 
   if (showAll) {
-    return (
-      reservation && (
-        <div style={{ borderStyle: "solid" }}>
-          {JSON.stringify(reservation)}
-          <p data-reservation-id-status={reservation.reservation_id}>
-            {reservation.status}
-          </p>
-          {seatAndEditButtons}
-          {cancelButton}
-        </div>
-      )
-    );
+    return reservation && <>{reservationInfo}</>;
   }
 
   return (
     reservation &&
     reservation.status !== "finished" &&
-    reservation.status !== "cancelled" && (
-      <div style={{ borderStyle: "solid" }}>
-        {JSON.stringify(reservation)}
-        <p data-reservation-id-status={reservation.reservation_id}>
-          {reservation.status}
-        </p>
-        {seatAndEditButtons}
-        {cancelButton}
-      </div>
-    )
+    reservation.status !== "cancelled" && <>{reservationInfo}</>
   );
 }
 

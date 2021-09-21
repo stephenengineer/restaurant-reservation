@@ -52,6 +52,7 @@ function TableForm({ formState, setFormState, tablesErrors, setTablesErrors }) {
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <label htmlFor="capacity">
         Capacity
         <input
@@ -65,6 +66,7 @@ function TableForm({ formState, setFormState, tablesErrors, setTablesErrors }) {
           onChange={handleFormChange}
         />
       </label>
+      <br />
       <button onClick={() => handleCancel()}>Cancel</button>
       <button type="submit">Submit</button>
     </form>

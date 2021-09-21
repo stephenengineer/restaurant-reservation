@@ -67,14 +67,8 @@ function Dashboard({
     <main>
       <h1>Dashboard</h1>
       <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+        <h4 className="mb-0">Reservations for {date}</h4>
       </div>
-      <ErrorAlert error={reservationsErrors} />
-      <ErrorAlert error={tablesErrors} />
-      Reservations: <br></br>
-      {reservationsList}
-      Tables: <br></br>
-      {tablesList}
       <button onClick={() => history.push(`/dashboard?date=${previous(date)}`)}>
         Previous
       </button>
@@ -84,6 +78,18 @@ function Dashboard({
       <button onClick={() => history.push(`/dashboard?date=${today()}`)}>
         Today
       </button>
+      <ErrorAlert error={reservationsErrors} />
+      <ErrorAlert error={tablesErrors} />
+      <div className="row">
+        <div className="row-sm col-md-6">
+          Reservations: <br />
+          {reservationsList}
+        </div>
+        <div className="row-sm col-md-6">
+          Tables: <br />
+          {tablesList}
+        </div>
+      </div>
     </main>
   );
 }

@@ -70,7 +70,7 @@ function Search({
         </label>
         <button type="submit">Find</button>
       </form>
-      Reservations: <br></br>
+      Reservations: <br />
       {searchResults}
     </>
   );
