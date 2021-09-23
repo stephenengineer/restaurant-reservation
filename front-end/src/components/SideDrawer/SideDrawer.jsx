@@ -10,7 +10,9 @@ function SideDrawer({ show, setSideDrawerOpen }) {
   return (
     <nav className={drawerClasses}>
       <Menu />
-      <p style={{ color: "white" }}>Touch outside to close the menu {">>>"}</p>
+      <p style={{ color: "white", marginLeft: "5px" }}>
+        Touch outside to close the menu {">>>"}
+      </p>
     </nav>
   );
 }
