@@ -1,6 +1,8 @@
 import React from "react";
 import { setReservationStatusToCancelled } from "../utils/api";
 
+import "./ReservationItem.css";
+
 function ReservationItem({
   reservation,
   showAll = false,
@@ -32,18 +34,22 @@ function ReservationItem({
       <h5 className="card-title">
         Reservation ID: {reservation.reservation_id}
       </h5>
-      <p>
-        Name: {reservation.first_name} {reservation.last_name} <br />
-        Phone: {reservation.mobile_number} <br />
-        Reservation Date: {reservation.reservation_date} <br />
-        Reservation Time: {reservation.reservation_time} <br />
-        Number of People: {reservation.people} <br />
-      </p>
-      <p data-reservation-id-status={reservation.reservation_id}>
-        {reservation.status}
-      </p>
-      {seatAndEditButtons}
-      {cancelButton}
+      <div className="card-body">
+        <p>
+          Name: {reservation.first_name} {reservation.last_name} <br />
+          Phone: {reservation.mobile_number} <br />
+          Reservation Date: {reservation.reservation_date} <br />
+          Reservation Time: {reservation.reservation_time} <br />
+          Number of People: {reservation.people} <br />
+        </p>
+        <p data-reservation-id-status={reservation.reservation_id}>
+          {reservation.status}
+        </p>
+        <div className="reservation-item-button">
+          {seatAndEditButtons}
+          {cancelButton}
+        </div>
+      </div>
     </div>
   );
 

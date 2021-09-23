@@ -36,14 +36,16 @@ function TableItem({ table, loadDashboard, tablesErrors, setTablesErrors }) {
     table && (
       <div className="card">
         <h5 className="card-title">Table ID: {table.table_id}</h5>
-        <p>
-          Name: {table.table_name} <br />
-          Table Capacity: {table.capacity} <br />
-          {table.reservation_id &&
-            `Seated Reservation ID: ${table.reservation_id}`}
-        </p>
-        <p data-table-id-status={table.table_id}>{freeOrOccupied}</p>
-        {finishButton}
+        <div className="card-body">
+          <p>
+            Name: {table.table_name} <br />
+            Table Capacity: {table.capacity} <br />
+            {table.reservation_id &&
+              `Seated Reservation ID: ${table.reservation_id}`}
+          </p>
+          <p data-table-id-status={table.table_id}>{freeOrOccupied}</p>
+          {finishButton}
+        </div>
       </div>
     )
   );
