@@ -4,4 +4,9 @@ html {
 
 body {
   height: 100%;
+  background: #fbeadb;
+}
+
+.card {
+  background: #fbeadb;
 }

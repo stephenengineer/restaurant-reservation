@@ -40,6 +40,7 @@ function Layout() {
         <SideDrawer
           show={sideDrawerOpen}
           setSideDrawerOpen={setSideDrawerOpen}
+          backdropClickHandler={backdropClickHandler}
         />
         {backdrop}
       </>

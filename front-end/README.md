@@ -1,5 +1,7 @@
 # Capstone: Restaurant Reservation System Frontend
 
-This starter code for the backend of the capstone project in the Thinkful curriculum.
+### API Interface:
+
+- Built to interface with the Periodic Tables Back End API: [restaurant-reservation-back-end](https://github.com/stephenengineer/starter-restaurant-reservation/tree/main/back-end).
 
 See [../README.md](../README.md) for detailed instructions.
